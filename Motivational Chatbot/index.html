@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Quotes Recommendation Chatbot</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef2f7;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.chat-container{
+width:420px;
+height:600px;
+background:white;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.chat-header{
+background:#4a6cf7;
+color:white;
+padding:15px;
+font-size:18px;
+text-align:center;
+}
+
+.chat-messages{
+flex:1;
+padding:15px;
+overflow-y:auto;
+}
+
+.message{
+margin:10px 0;
+max-width:75%;
+padding:10px 15px;
+border-radius:15px;
+}
+
+.user{
+background:#4a6cf7;
+color:white;
+align-self:flex-end;
+margin-left:auto;
+}
+
+.bot{
+background:#e5e5ea;
+color:black;
+}
+
+.chat-input{
+display:flex;
+border-top:1px solid #ddd;
+}
+
+.chat-input input{
+flex:1;
+border:none;
+padding:15px;
+font-size:14px;
+outline:none;
+}
+
+.chat-input button{
+background:#4a6cf7;
+border:none;
+color:white;
+padding:0 20px;
+cursor:pointer;
+}
+
+.chat-input button:hover{
+background:#3953c6;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="chat-container">
+
+<div class="chat-header">
+Quotes Recommendation Bot
+</div>
+
+<div id="messages" class="chat-messages"></div>
+
+<div class="chat-input">
+<input id="msg" placeholder="Ask for a quote..." />
+<button onclick="send()">Send</button>
+</div>
+
+</div>
+
+<script>
+
+function addMessage(text,cls){
+
+let div=document.createElement("div")
+div.className="message "+cls
+div.innerText=text
+
+document.getElementById("messages").appendChild(div)
+
+document.getElementById("messages").scrollTop=
+document.getElementById("messages").scrollHeight
+}
+
+function send(){
+
+let text=document.getElementById("msg").value
+
+if(text.trim()=="") return
+
+addMessage(text,"user")
+
+fetch("http://localhost:5005/webhooks/rest/webhook",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+sender:"user",
+message:text
+})
+
+})
+
+.then(r=>r.json())
+
+.then(data=>{
+
+data.forEach(e=>{
+addMessage(e.text,"bot")
+})
+
+})
+
+document.getElementById("msg").value=""
+}
+
+</script>
+
+</body>
+</html>

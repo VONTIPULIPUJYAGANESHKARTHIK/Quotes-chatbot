@@ -1,0 +1,25 @@
+version: "3.1"
+
+intents:
+  - greet
+  - ask_quote
+  - motivation
+  - goodbye
+
+responses:
+
+  utter_greet:
+    - text: "Hello! I am your Quotes Recommendation Chatbot."
+
+  utter_motivation:
+    - text: "Stay positive and keep pushing forward."
+
+  utter_goodbye:
+    - text: "Goodbye! Have a great day."
+
+actions:
+  - action_give_quote
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
